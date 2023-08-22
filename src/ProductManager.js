@@ -60,10 +60,49 @@ class ProductManager {
 let pm = new ProductManager();
 pm.setPath("/products");
 
-pm.addProduct("BMW", "M330 / Año= 2020 / Color = Gris plata / Km = 42320km", "$12.000.000,00", "", "B002", "1");
-pm.addProduct("Cadilac", "CT5 / Año= 2022 / Color = Negro / Km = 12045km", "$18.000.000,00", "", "C001", "2");
-pm.addProduct("Dodge", "Charger / Año= 2014 / Color = Blanco / Km = 87320km", "$10.000.000,00", "", "D023", "3");
-pm.addProduct("GMC", "Sierra / Año= 2023 / Color = Azul / Km = 23371km", "$24.000.000,00", "", "G005", "4");
+let autos = [
+    {
+        "marca": "BMW",
+        "modelo": "M330",
+        "color": "Gris Plata",
+        "kilometraje": "42320",
+        "precio": "12000000",
+        "año": "2020",
+        "id": "1",
+    },
+    {
+        "marca": "Cadilac",
+        "modelo": "CT5",
+        "color": "Negro",
+        "kilometraje": "12045",
+        "precio": "18000000",
+        "año": "2022",
+        "id": "2",
+    },
+    {
+        "marca": "Dodge",
+        "modelo": "Charger",
+        "color": "Blanco",
+        "kilometraje": "87320",
+        "precio": "10000000",
+        "año": "2014",
+        "id": "3",
+    },
+    {
+        "marca": "GMC",
+        "modelo": "Sierra",
+        "color": "Azul",
+        "kilometraje": "23371",
+        "precio": "24000000",
+        "año": "2023",
+        "id": "4",
+    }
+]
+
+    pm.addProduct("BMW", "M330 / Año= 2020 / Color = Gris plata / Km = 42320km", "$12.000.000,00", "", "B002", "1");
+    pm.addProduct("Cadilac", "CT5 / Año= 2022 / Color = Negro / Km = 12045km", "$18.000.000,00", "", "C001", "2");
+    pm.addProduct("Dodge", "Charger / Año= 2014 / Color = Blanco / Km = 87320km", "$10.000.000,00", "", "D023", "3");
+    pm.addProduct("GMC", "Sierra / Año= 2023 / Color = Azul / Km = 23371km", "$24.000.000,00", "", "G005", "4");
 
 console.log("Todos los productos:", pm.getProducts());
 
