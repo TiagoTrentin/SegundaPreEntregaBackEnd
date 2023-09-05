@@ -1,5 +1,11 @@
-const express = require('express');
+import { Server } from 'socket.io';
+import express from 'express';
+import http from 'http';
+
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
 const port = 8080;
 
 class ProductManager {
@@ -13,7 +19,7 @@ class ProductManager {
     }
 
     addProduct(title, description, price, thumbnail, code, category, stock, id, status) {
-                let newProduct = {
+        let newProduct = {
             title,
             description,
             price,
@@ -165,6 +171,31 @@ app.put('/:pid', (req, res) => {
     }
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Servidor en funcionamiento en http://localhost:${port}`);
+});
+
+io.on('connection', (socket) => {
+    console.log(`Se ha conectado un cliente con id ${socket.id}`);
+
+    socket.emit('bienvenida', { message: 'Bienvenido al servidor' });
+
+    socket.on("identificacion", nombre => {
+        console.log(`Se ha conectado ${nombre}`);
+        socket.emit('idCorrecto', { message: `Hola ${nombre}. Bienvenido` });
+    });
+});
+
+app.get('/autos', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(autos);
+});
+
+app.post('/autos', (req, res) => {
+    let nuevosAutos = req.body;
+
+    autos.push(...nuevosAutos);
+    io.emit('nuevoAuto', nuevosAutos, autos);
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(autos);
 });

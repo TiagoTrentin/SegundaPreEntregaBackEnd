@@ -1,6 +1,7 @@
 {
   "name": "segundapreentrega_tiagoisola_backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "ProductManager.js",
   "scripts": {
