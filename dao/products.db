@@ -1,0 +1,54 @@
+db.autos.insetMany([
+    {
+        "marca": "BMW",
+        "modelo": "M330",
+        "color": "Gris Plata",
+        "kilometraje": "42320",
+        "precio": "$12.000.000,00",
+        "año": "2020",
+        "category": "deportivo",
+        "id": 1,
+    },
+    {
+        "marca": "Cadillac",
+        "modelo": "CT5",
+        "color": "Negro",
+        "kilometraje": "12045",
+        "precio": "$18.000.000,00",
+        "año": "2022",
+        "category": "deportivo",
+        "id": 2,
+    },
+    {
+        "marca": "Dodge",
+        "modelo": "Charger",
+        "color": "Blanco",
+        "kilometraje": "87320",
+        "precio": "$10.000.000,00",
+        "año": "2014",
+        "category": "deportivo",
+        "id": 3,
+    },
+    {
+        "marca": "GMC",
+        "modelo": "Sierra",
+        "color": "Azul",
+        "kilometraje": "23371",
+        "precio": "$24.000.000,00",
+        "año": "2023",
+        "category": "camioneta",
+        "id": 4,
+    }
+])
+
+db.autos.find({nombre:'GMC', modelo:'Sierra'})
+
+db.autos.find({category:'camioneta'})
+
+// Update / Delate:
+db.autos.updateOne({name:'BMW'},{$unset:{kilometraje:true}})
+db.autos.updateOne({name:'BMW'},{$set:{kilometraje:[
+    'kilometraje real',
+    'price',
+    'color'
+]}})
