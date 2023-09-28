@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Nuevos Vehiculos" />
+    <meta name="author" content="Tiago" />
+    <title>Automart</title>
+</head>
+
+    <main>
+        <section>
+            <div class="container mt-6" style="max-width: 500px">
+                <form action="/api/products" method="post" enctype="multipart/form-data">
+                    <h3 class="is-size-3 mb-5">Ingrese un nuevo producto</h3>
+                    <div class="field">
+                        <label class="label">Nombre</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input is-success" type="text" placeholder="Ingrese el nombre del producto"
+                                value="" name="name" required />
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Precio</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input is-success" type="number" step="0.01"
+                                placeholder="Ingrese el precio del producto" value="" name="price" required />
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-dollar-sign"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="file is-boxed">
+                            <label class="file-label">
+                                <input id="imagenInput" class="file-input" type="file" name="photo" required />
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <ion-icon name="cloud-upload-outline" style="font-size: 25px"></ion-icon>
+                                    </span>
+                                    <span class="file-label"> Sube una imagen </span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-success">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
