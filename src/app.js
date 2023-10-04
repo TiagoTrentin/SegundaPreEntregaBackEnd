@@ -1,55 +1,47 @@
-import mongoose, { Schema } from "mongoose";
+import express from 'express';
+import path from 'path';
+import { Server } from 'socket.io';
+import { engine } from 'express-handlebars';
+import mongoose from 'mongoose';
+import productsRouter from './dao/MongoDb/routes/products.routes.js';
+import viewRouter from './dao/MongoDb/routes/views.routes.js';
+import cartRouter from './dao/MongoDb/routes/cart.routes.js';
+import messageRoute from './dao/MongoDb/routes/messages.routes.js';
 
-const express = require('express');
-const routerProduct = require('./router/products.router');
+const PORT = 3000;
+const DB_URI = 'mongodb://localhost:27017/';
+
 const app = express();
-const port = 3000; 
 
-const autosModelos=mongoose.model('modelos',new mongoose.Schema({
-     titulo: String, kilometros: Number, modelo: String
-}))
-   
-const modelosEsquema=new mongoose.Schema({
-    nombre: String, marca: String, color: String,
-    Disponible:{
-        type: [
-            {
-                modelo:{
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'modelos'
-                }
-            }
-        ]
-    }
-})
+app.engine('handlebars', engine({ allowProtoMethodsByDefault: true }));
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, '/views'));
 
-const autosModelo=mongoose.model('modelo',modelosEsquema)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname, '/public')));
 
-try{
-    await mongoose.connect('')
-    console.log('DB Online')
+app.use('/api/products/', productsRouter);
+app.use('/api/messages/', messageRoute);
+app.use('/api/carts/', cartRouter);
+app.use('/', viewRouter);
 
-    //crear autos
-    //let auto1=await autosModelo.create({
-        //titulo: 'Sedan', kilometros: 40000, modelo: 'Audi'
-    //})
+const serverExpress = app.listen(PORT, () => {
+    console.log(`Server escuchando en puerto ${PORT}`);
+});
 
-    //let auto2=await autosModelo.create({
-        //titulo: 'Coupe', kilometros: 23000, modelo: 'Porsche'
-    //})
+const serverSocket = new Server(serverExpress);
 
-    //console.log(auto1, auto2)
+serverSocket.on('connection', socket => {
+    console.log(`Se ha conectado un cliente con id ${socket.id}`);
+});
 
-    //let modelo=await autosModelo.create({
-        //nombre: 'Charger', marca: 'Dodge', color: 'Gris',
-        //modelo: [{modelos:'650a345e0d59ae24bfff461e1'},{modelo:'650a345e0d59ae24bff461e2'}]
-    //})
-
-    //console.log(modelo)
-
+try {
+    await mongoose.connect(DB_URI);
+    console.log('DB online');
 } catch (error) {
-    console.log(error.message)
+    console.error('Error al conectar a la base de datos:', error.message);
 }
 
-process.exit()
+export { serverSocket };
