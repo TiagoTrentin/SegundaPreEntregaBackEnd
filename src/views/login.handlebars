@@ -1,0 +1,26 @@
+<div class="login-container">
+    <h2>Login de usuarios:</h2>
+    <hr>
+    <form action="/api/sessions/login" method="post">
+        {{#if error}}
+            <div class="error">{{errorDetalle}}</div>
+        {{/if}}
+
+        {{#if usuarioCreado}}
+            <div class="success">Se ha creado correctamente el usuario {{usuarioCreadoDetalle}}</div>
+        {{/if}}
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" placeholder="password" required>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+{{>menu}}

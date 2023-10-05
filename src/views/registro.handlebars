@@ -1,0 +1,37 @@
+<div class="register-container">
+    <h2>Registro de usuarios:</h2>
+    <hr>
+    <form action="/api/sessions/registro" method="post">
+        {{#if error}}
+            <div class="error">{{errorDetalle}}</div>
+        {{/if}}
+
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="nombre" required>
+        </div>
+
+        <div class="form-group">
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" placeholder="apellidos" required>
+        </div>
+
+        <div class="form-group">
+            <label for="age">Edad:</label>
+            <input type="number" id="age" name="age" placeholder="edad" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" placeholder="password" required>
+        </div>
+
+        <button type="submit">Registrar</button>
+    </form>
+</div>
+{{>menu}}
