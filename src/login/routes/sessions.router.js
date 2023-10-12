@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import crypto from 'crypto';
-import { modeloUsuarios } from '../models/usuarios.models.js';
+import bcrypt from 'bcrypt'; 
 import passport from 'passport';
+import { modeloUsuarios } from '../models/usuarios.models.js';
 
 export const router = Router();
 
@@ -15,12 +15,10 @@ router.get('/errorRegistro', (req, res) => {
 router.post('/registro', passport.authenticate('registro', { failureRedirect: '/api/sessions/errorRegistro' }), async (req, res) => {
     let { nombre, email, password, age, lastName } = req.body;
 
-    password = crypto.createHmac('sha256', 'palabraSecreta').update(password).digest('base64');
-
     await modeloUsuarios.create({
         nombre,
         email,
-        password,
+        password, 
         age,
         lastName
     });
@@ -37,19 +35,27 @@ router.post('/login', async (req, res) => {
         return res.redirect('/login?error=Faltan datos');
     }
 
-    password = crypto.createHmac('sha256', 'palabraSecreta').update(password).digest('base64');
+    try {
+        const usuario = await modeloUsuarios.findOne({ email });
+        if (!usuario) {
+            return res.redirect('/login?error=credenciales incorrectas');
+        }
 
-    let usuario = await modeloUsuarios.findOne({ email, password });
-    if (!usuario) {
-        return res.redirect('/login?error=credenciales incorrectas');
+        const match = await bcrypt.compare(password, usuario.password);
+        if (match) {
+            req.session.usuario = {
+                nombre: usuario.nombre,
+                email: usuario.email
+            }
+
+            res.redirect('/perfil');
+        } else {
+            res.redirect('/login?error=credenciales incorrectas');
+        }
+    } catch (error) {
+        console.error(error);
+        res.redirect('/login?error=Error interno');
     }
-
-    req.session.usuario = {
-        nombre: usuario.nombre,
-        email: usuario.email
-    }
-
-    res.redirect('/perfil');
 });
 
 router.get('/logout', (req, res) => {
