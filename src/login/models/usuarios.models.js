@@ -1,28 +1,11 @@
-import mongoose from 'mongoose';
+import { Router } from 'express';
+import usuariosController from '../controllers/usuariosController.js';
 
-const usuarioSchema = new mongoose.Schema({
-    nombre: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    age: {
-        type: Number,
-        required: true
-    },
-    lastName: {
-        type: String,
-        required: true
-    }
-});
+const router = Router();
 
-export const modeloUsuarios = mongoose.model('usuarios', usuarioSchema);
+router.get('/', usuariosController.getUsers);
+router.get('/:id', usuariosController.getUserById);
+router.get('/email/:email', usuariosController.getUserByEmail);
+router.post('/', usuariosController.postUser);
+
+export default router;

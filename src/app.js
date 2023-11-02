@@ -7,6 +7,9 @@ import productsRouter from './dao/MongoDb/routes/products.routes.js';
 import viewRouter from './dao/MongoDb/routes/views.routes.js';
 import cartRouter from './dao/MongoDb/routes/cart.routes.js';
 import messageRoute from './dao/MongoDb/routes/messages.routes.js';
+export const DB_URL = process.env.DB_URL;
+export const PORT = process.env.PORT || 3000; 
+
 
 const PORT = 3000;
 const DB_URI = 'mongodb://localhost:27017/';
