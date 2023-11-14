@@ -1,11 +1,9 @@
-import UsuariosMongoDAOFactory from "../path/to/usuariosMongoDAOFactory.js";
-
-class UsuariosService {
-    constructor() {
-        this.dao = UsuariosMongoDAOFactory.createDAO();
+class UsuariosRepository {
+    constructor(dao) {
+        this.dao = dao;
     }
 
-    async getUsers() {
+    async getAllUsers() {
         try {
             const users = await this.dao.get();
             return users;
@@ -46,4 +44,4 @@ class UsuariosService {
     }
 }
 
-export const usuariosService = new UsuariosService();
+export default UsuariosRepository;
