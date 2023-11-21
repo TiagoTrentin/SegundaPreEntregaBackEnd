@@ -34,6 +34,10 @@ app.use('/', viewRouter);
 app.use(bodyParser.json());
 app.use(passport.initialize());
 
+app.use(errorHandler);
+app.use('/api/products/', productsRouter);
+app.use('/api/', mockingProductsRouter);
+
 const serverExpress = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
@@ -122,4 +126,6 @@ const server = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
 
+
 export { serverSocket };
+
