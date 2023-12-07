@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import fs from 'fs';
 import path from 'path';
-import { serverSocket } from '../../../app.js'; // Ajusta la ruta según la ubicación real
+import { serverSocket } from '../../../app.js'; 
 
 const router = Router();
 const ruta = path.join(__dirname, 'files', 'products.json');
