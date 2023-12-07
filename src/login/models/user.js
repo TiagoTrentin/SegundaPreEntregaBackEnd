@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   age: Number,
   password: String,
   cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Carts' },
-  role: { type: String, default: 'user' }
+  role: { type: String, default: 'user' },
+  premium: { type: Boolean, default: false },
 });
 
 const UserModel = mongoose.model('User', userSchema);
