@@ -1,0 +1,179 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene una lista de productos filtrados según parámetros.
+      tags: [products]
+      parameters:
+        - name: category
+          in: query
+          description: Filtra por categoría. Omite para obtener todos los productos.
+          schema:
+            type: string
+        - name: stock
+          in: query
+          description: Filtra por stock. Omite para obtener todos los productos.
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Ordena los productos por precio (ascendente o descendente).
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Número de página para la paginación. Por defecto, 1.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Cantidad de productos por página. Por defecto, 10.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Productos obtenidos correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPayload'
+        '500': 
+          description: Error inesperado al tratar de recuperar los productos solicitados.
+    post:
+      summary: Crea un nuevo producto.
+      tags: [products]
+      consumes: [application/json]
+      parameters:
+        - in: body
+          name: product
+          description: Datos del producto a crear.
+          schema:
+            $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto creado correctamente.
+        '400':
+          description: Código de producto ya existe.
+        '500': 
+          description: Error inesperado al tratar de crear un producto.
+
+  /api/products/{pid}:
+    get:
+      summary: Obtiene la información de un producto por su ID.
+      tags: [products]
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto solicitado.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: El producto requerido no existe.
+        '452':
+          description: El identificador del producto no es válido (debe ser un string con formato válido de un object ID de MongoDB).
+        '500': 
+          description: Error inesperado al tratar obtener un producto por su ID.
+    put:
+      summary: Actualiza un producto por su ID.
+      tags: [products]
+      consumes: [application/json]
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto a modificar.
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: product
+          description: Datos del producto a modificar.
+          schema:
+            $ref: '#/components/schemas/Product'
+      responses:
+        '403': 
+          description: Usuario no autorizado a hacer esta transacción.
+        '404':
+          description: El producto requerido no existe.
+        '452':
+          description: El identificador del producto no es válido (debe ser un string con formato válido de un object ID de MongoDB).
+        '453': 
+          description: Datos faltantes o inválidos.
+    delete:
+      summary: Elimina un producto por su ID.
+      tags: [products]
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto a eliminar.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Producto eliminado correctamente.
+        '403': 
+          description: Usuario no autorizado a hacer esta transacción.
+        '404':
+          description: El producto requerido no existe.
+        '452':
+          description: El identificador del producto no es válido (debe ser un string con formato válido de un object Id de MongoDB).
+        '500': 
+          description: Error inesperado al tratar de eliminar un producto.
+
+  /api/mockingproducts:
+    get:
+      summary: Devuelve la información de 100 productos inventados por faker-js.
+      tags: [mockingproducts]
+      responses:
+        '200':
+          description: Devuelve la lista de los 100 productos inventados en formato JSON.
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/Product'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del producto autogenerado por Mongo
+        code:
+          type: string
+          description: Código de producto
+        title:
+          type: string
+          description: Título del producto
+        description:
+          type: string
+          description: Descripción del producto
+        price:
+          type: integer
+          description: Precio unitario del producto
+        stock:
+          type: integer
+          description: Stock en existencia
+        thumbnail:
+          type: array
+          items: 
+            type: string
+            description: URL de las miniaturas del producto
+        owner:
+          type: string
+          description: Email del comercializador del producto
+        status:
+          type: boolean
+          description: Estado del producto
+        
+      example:
+        _id: Iv1.1db47e8230110a7a
+        code

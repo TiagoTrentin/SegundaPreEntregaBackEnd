@@ -8,6 +8,8 @@ import multer from 'multer';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 import passport from 'passport';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 import usersRoutes from './routes/usersRoutes.js';
 import productsRouter from './dao/MongoDb/routes/products.routes.js';
 import viewRouter from './dao/MongoDb/routes/views.routes.js';
@@ -34,9 +36,21 @@ app.use('/', viewRouter);
 app.use(bodyParser.json());
 app.use(passport.initialize());
 
-app.use(errorHandler);
-app.use('/api/products/', productsRouter);
-app.use('/api/', mockingProductsRouter);
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Api de usuarios',
+      version: '1.0.0',
+      description: 'Documentacion de Api de Usuarios',
+    },
+  },
+  apis: ['./*.js'], 
+};
+
+const specs = swaggerJsdoc(options);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 const serverExpress = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
@@ -126,6 +140,4 @@ const server = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
 
-
 export { serverSocket };
-
