@@ -2,10 +2,30 @@ import { Router } from 'express';
 import path from 'path';
 import fs from 'fs';
 import passport from 'passport';
+import nodemailer from 'nodemailer'; 
 import { serverSocket } from '../../../app.js';
 
 const router = Router();
 const ruta = path.join(__dirname, 'files', 'products.json');
+
+async function sendEmail(userEmail, productName) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'tiagoandresisola@gmail.com',
+      pass: 'ABCJHIER', 
+    },
+  });
+
+  const mailOptions = {
+    from: 'tiagoandresisola@gmail.com',
+    to: userEmail,
+    subject: 'Producto eliminado',
+    text: `Tu producto ${productName} ha sido eliminado.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
 
 function getProducts() {
   return fs.existsSync(ruta) ? JSON.parse(fs.readFileSync(ruta, 'utf-8')) : [];
@@ -39,7 +59,7 @@ router.get('/:pid', (req, res) => {
   if (product) {
     res.json(product);
   } else {
-    res.status(404).json({ error: 'Product not found' });
+    res.status(404).json({ error: 'Producto no encontrado' });
   }
 });
 
@@ -49,7 +69,7 @@ router.put('/:pid', async (req, res) => {
     const { title, description, code, price, stock, category, thumbnail } = req.body;
 
     if (![title, description, code, price, stock, category].every(Boolean)) {
-      return res.status(400).json({ error: 'Complete all required fields in the body' });
+      return res.status(400).json({ error: 'Complete todas las casillas solicitadas' });
     }
 
     const products = getProducts();
@@ -80,7 +100,7 @@ router.put('/:pid', async (req, res) => {
         res.status(403).json({ error: 'Acceso no autorizado. Solo el propietario o el admin pueden modificar este producto.' });
       }
     } else {
-      res.status(404).json({ error: 'Product not found' });
+      res.status(404).json({ error: 'Producto no encontrado' });
     }
   } catch (error) {
     console.error(error);
@@ -101,14 +121,18 @@ router.delete('/:pid', async (req, res) => {
         const [deletedProduct] = products.splice(productIndex, 1);
         saveProducts(products);
 
-        serverSocket.emit('productDeleted', { productId, products });
+        if (user.premium) {
+          await sendEmail(user.email, deletedProduct.title);
+        }
+
+        serverSocket.emit('Producto eliminado', { productId, products });
 
         res.status(200).json({ deletedProduct });
       } else {
         res.status(403).json({ error: 'Acceso no autorizado. Solo el propietario o el admin pueden borrar este producto.' });
       }
     } else {
-      res.status(404).json({ error: 'Product not found' });
+      res.status(404).json({ error: 'Producto no encontrado' });
     }
   } catch (error) {
     console.error(error);

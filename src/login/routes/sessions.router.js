@@ -33,6 +33,41 @@ const hasRequiredDocuments = async (req, res, next) => {
   }
 };
 
+router.get('/', isAuthenticated, async (req, res) => {
+  try {
+    const users = await modeloUsuarios.find({}, { nombre: 1, email: 1, rol: 1 }); 
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+});
+
+router.delete('/', isAuthenticated, async (req, res) => {
+  try {
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+    const inactiveUsers = await modeloUsuarios.find({ last_connection: { $lt: twoDaysAgo } });
+
+    inactiveUsers.forEach(async (user) => {
+
+      await sendEmail(user.email, 'Notificacion de eliminacion de cuenta', 'Tu cuenta a sido eliminada por inactividad.');
+
+      await modeloUsuarios.findByIdAndDelete(user._id);
+    });
+
+    res.status(200).json({ mensaje: 'Usuarios inactivos eliminados correctamente.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+});
+
+const sendEmail = async (to, subject, message) => {
+  console.log(`Email sent to ${to} with subject: ${subject}, message: ${message}`);
+};
+
 router.get('/errorRegistro', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.status(200).json({
