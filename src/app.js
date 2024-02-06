@@ -9,13 +9,10 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { Server } from 'socket.io';
 
-import productsRouter from './router/products.router.js';
-import messageRoute from './router/message.route.js';
-import cartRouter from './router/cart.router.js';
-import viewRouter from './router/view.router.js';
-import cargarProductos from './router/cargarProductos.router.js';
-import sessionsRouter from './router/sessions.router.js';
-import apiLoggerRouter from './router/logger.router.js';
+import productsRouter from './routes/products.router.js';
+import cartRouter from './routes/cartsRoutes.js';
+import viewRouter from './routes/view.router.js';
+import sessionsRouter from './routes/sessions.router.js';
 
 import { DB_URL, PORT } from './config.js';
 
